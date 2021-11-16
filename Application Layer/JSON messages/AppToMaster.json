@@ -1,0 +1,125 @@
+//This is the different JSON messages transmitted from the Smartphone to the Master Node
+
+//Message If user presses a Automatic Function option
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Function", // Must be "Function", "Command", "Function Creation", "Terminate",  or "Fixture Creation"
+    "Name": "Jazz Ambiance", //The name of the function as chosen by the User
+  }
+}
+
+//Message if user wants a specifc light to be in a specific setting
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Command", // Must be "Function", "Command", "Function Creation", "Terminate", or "Fixture Creation"
+    "FixtureID": 2354, //The id in Integer of the DMX light to change
+    "Channels": [ 125, 0, 62, 214 ], //A table containing, for each channel of the fixture, a 0-255 DMX int value 
+  }
+}
+
+//Message if user wants to create a new automatic function
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Function Creation", // Must be "Function", "Command", "Function Creation", "Terminate", " or "Fixture Creation"
+    "Name": "New Function 2", //Name of the new function
+    "Fixture": [
+      {
+        "FixtureId": 4268, //The id in Integer of the DMX light to change
+        "Command": [ //The list of commands to follow, in order
+          {
+            "Duration": 2156.168, //the duration as a Long in miliSeconds
+            "Channels": [ 125, 0, 62, 214 ], //A table containing, for each channel of the fixture, a 0-255 DMX int value
+          },
+          {
+            "Duration": 3000, //the duration as a Long in miliSeconds
+            "Channels": [ 0, 0, 255, 214 ], //A table containing, for each channel of the fixture, a 0-255 DMX int value
+          },
+         ]
+      },
+      {
+        "FixtureId": 452, //The id in Integer of the DMX light to change
+        "Command": [ //The list of commands to follow, in order
+          {
+            "Duration": 2000, //the duration as a Long in miliSeconds
+            "Channels": [ 125, 0, 62, 214 ], //A table containing, for each channel of the fixture, a 0-255 DMX int value
+          },
+          {
+            "Duration": 3000, //the duration as a Long in miliSeconds
+            "Channels": [ 0, 0, 255, 214 ], //A table containing, for each channel of the fixture, a 0-255 DMX int value
+          },
+         ]
+      }
+     ]
+  }
+}
+
+//Message If user wants to terminate the system
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Terminate", // Must be "Function", "Command", "Function Creation", "Terminate", or "Fixture Creation"
+  }
+}
+
+//Message If user wants to create new fixture
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Fixture Creation", // Must be "Function", "Command", "Function Creation", "Terminate", or "Fixture Creation"
+    "Model": "Starville 1500M RGB", //A name of a model that exists in out databasis
+    "FixtureId": 452, //The id of the node that the fixture is connected to
+  }
+}
+
+
+
+
+
+// DATA MODELS
+//Message If user wants create a new environment
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Environment Creation", // Must be "Function", "Command", "Function Creation", "Terminate", "Environment Creation" or "Fixture Creation"
+    "Name": "Salle de Concert", //Name of the new environment
+    "Fixtures": [
+      {
+        "FixtureId": 4632, //The id in Integer of the fixture
+        "x": 48, //The x axis position of the fixture in the plan
+        "y": -65 //The y axis position of the fixture in the plan
+      },
+      {
+        "FixtureId": 452, //The id in Integer of the fixture
+        "x": 2, //The x axis position of the fixture in the plan
+        "y": -32 //The y axis position of the fixture in the plan
+      }
+    ]
+  }
+}
+
+
+//Message If user wants to create new fixture
+{
+  "Version": 1.3, // the system version for verification
+  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
+  "SessionId": 486316, // the connection session Id for verification
+  "Data": {
+    "Type": "Terminate", // Must be "Function", "Command", "Function Creation", "Terminate", "Environment Creation" or "Fixture Creation"
+  }
+}
+
