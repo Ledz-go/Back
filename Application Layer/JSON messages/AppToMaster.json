@@ -85,41 +85,17 @@
 }
 
 
+//------------------------------------------------------------------------------------------------------------------------
+//In this part we will define the JSON messages groing from Master Node to Smartphone
 
-
-
-// DATA MODELS
-//Message If user wants create a new environment
+//Message sent by Node to ack a message from smartphone or say that there was an error
 {
-  "Version": 1.3, // the system version for verification
-  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
-  "SessionId": 486316, // the connection session Id for verification
-  "Data": {
-    "Type": "Environment Creation", // Must be "Function", "Command", "Function Creation", "Terminate", "Environment Creation" or "Fixture Creation"
-    "Name": "Salle de Concert", //Name of the new environment
-    "Fixtures": [
-      {
-        "FixtureId": 4632, //The id in Integer of the fixture
-        "x": 48, //The x axis position of the fixture in the plan
-        "y": -65 //The y axis position of the fixture in the plan
-      },
-      {
-        "FixtureId": 452, //The id in Integer of the fixture
-        "x": 2, //The x axis position of the fixture in the plan
-        "y": -32 //The y axis position of the fixture in the plan
-      }
-    ]
-  }
+  "FixtureId": 1464, //The id of the node
+  "Type": "ACK" // or "Error"
 }
 
 
-//Message If user wants to create new fixture
-{
-  "Version": 1.3, // the system version for verification
-  "Timestamp": "2012-04-23T18:25:43.511Z", //JSON date format as conformed to ISO 8601
-  "SessionId": 486316, // the connection session Id for verification
-  "Data": {
-    "Type": "Terminate", // Must be "Function", "Command", "Function Creation", "Terminate", "Environment Creation" or "Fixture Creation"
-  }
-}
+
+
+
 
