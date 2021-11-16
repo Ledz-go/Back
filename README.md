@@ -11,9 +11,9 @@ In the application layer we will open sockets between the different agents of th
 TBD : Do we need a password to connect to the Master Node? SessionId creation for the connection, to be used for log messages. System status must be kept up to date and analysed
 
 #### To Do
-- [] Finite State Machine for the in messages
-- [] Finite State Machine for the out messages
-- [] API for the smartphone message processing
+- [ ] Finite State Machine for the in messages
+- [ ] Finite State Machine for the out messages
+- [ ] API for the smartphone message processing
 
 
 
