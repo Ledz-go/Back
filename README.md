@@ -1,5 +1,5 @@
 # Master Node
-The Master Node is the one parsing the message from the Smartphone andrelaying the appropriate data to the different nodes it is connected to. It has to initate a WiFi hot sport and receive WiFi connection requests from all the surrounding nodes.
+The Master Node is the one parsing the message from the Smartphone and relaying the appropriate data to the different nodes it is connected to. It has to initate a WiFi hot sport and receive WiFi connection requests from all the surrounding nodes.
 
 ## Communication Layer
 TBD
