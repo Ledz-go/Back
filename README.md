@@ -20,6 +20,7 @@ TBD : Do we need a password to connect to the Master Node? SessionId creation fo
 - [ ] API for the smartphone message processing
 - Pas de ACK, pas de message de retour
 - Transfomrer la librairie des lumières en un seul JSON
+- Interogation du réseau
 
 
 
