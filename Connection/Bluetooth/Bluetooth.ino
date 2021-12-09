@@ -1,42 +1,44 @@
 #include <SoftwareSerial.h>
-#define rxPin 11 // Broche 11 en tant que RX, à raccorder sur TX du HC-05
-#define txPin 10 // Broche 10 en tant que TX, à raccorder sur RX du HC-05
-SoftwareSerial mySerial(rxPin, txPin);
+#define rxPin D2 // Broche D2 en tant que RX, à raccorder sur TX du HC-05
+#define txPin D3 // Broche D3 en tant que TX, à raccorder sur RX du HC-05
+#define keyPin D4 // Broche D4 en tant que key, à raccorder sur Key du HC-05
+SoftwareSerial BTSerial(rxPin, txPin);
 void setup()
 {
     // define pin modes for tx, rx pins:
     pinMode(rxPin, INPUT);
     pinMode(txPin, OUTPUT);
-    mySerial.begin(38400);
-    Serial.begin(38400); 
 
-    if(mySerial.write("AT") == "OK"){
-        mySerial.write("AT+NAME=Ledz Go");
-        mySerial.write("AT+ROLE=1");
-        mySerial.write("AT+RESET");
-        mySerial.write("AT+INIT");
-    }
+    BTSerial.begin(9600);
+    Serial.begin(9600); 
+
+    // setup key pin
+    pinMode(keyPin, OUTPUT);
+    digitalWrite(keyPin, LOW); // key pin 
+    
+    delay(10000); //10s
+
+    // digitalWrite(keyPin, HIGH);
+
+
+    //if(BTSerial.write("AT") == "OK"){
+        // BTSerial.write("AT+NAME=Ledz Go");
+        // BTSerial.write("AT+ROLE=1");
+        // BTSerial.write("AT+RESET");
+        // BTSerial.write("AT+INIT");
+    //}
 
 }
 
 void loop()
 {
-    int i = 0;
-    char someChar[32] = {0};
-    // when characters arrive over the serial port...
-    if(Serial.available()) {
-    do{
-        someChar[i++] = Serial.read();
-        delay(3);
-    } while (Serial.available() > 0);
-    mySerial.println(someChar);
-    Serial.println(someChar);
-    }
-    while(mySerial.available())
-        Serial.print((char)mySerial.read());
-}
+  // Keep reading from HC-05 and send to Arduino 
+  // Serial Monitor
+  if (BTSerial.available())
+    Serial.write(BTSerial.read());
 
-String getBluetoothAddr(){
-    mySerial.write("AT+ADDR");
-
+  // Keep reading from Arduino Serial Monitor 
+  //  and send to HC-05
+  if (Serial.available())
+    BTSerial.write(Serial.read());
 }
