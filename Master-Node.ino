@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <SoftwareSerial.h>
+#include <ESPDMX.h>
 
 // Wifi vars
 String ssid = "ledzGO";
@@ -13,10 +14,15 @@ int max_connection = 8;
 #define txPin D3 // Broche D3 en tant que TX, à raccorder sur RX du HC-05
 SoftwareSerial BTSerial(rxPin, txPin);
 
+// DMX vars
+DMXESPSerial dmx;
+
 void setup(){
     Serial.begin(9600);
     Serial.println("LedzGo master node start");
+    
 
+    // Wifi setup
     Serial.println("Starting AP");
     Serial.println(WiFi.softAP(ssid, psk, channel, hidden, max_connection) ? "AP ready" : "AP failed");
     Serial.print("Soft-AP IP address = ");
@@ -30,6 +36,14 @@ void setup(){
     pinMode(txPin, OUTPUT);
 
     BTSerial.begin(9600);
+
+    // DMX setup
+    dmx.init(512);
+
+    // To use :
+    // dmx.write(channel, value) for on off channel
+    // dmx.write() for update dmx bus
+    
 }
 
 void loop(){
