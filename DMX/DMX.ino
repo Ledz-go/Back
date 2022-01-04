@@ -31,16 +31,22 @@ void loop() {
 
     dmx.write(1, 255);      // channal 1 on
     dmx.update();           // update the DMX bus
-    delay(1000);            // wait for 1s
+    delay(10000);            // wait for 1s
 
     dmx.write(1,0);
     dmx.write(2, 255);
     dmx.update();
-    delay(1000);
+    delay(10000);
 
     dmx.write(2,0);
     dmx.write(3, 255);
     dmx.update();
-    delay(1000);
+    delay(10000);
+
+    for(int i; i < 1000; i++){
+      dmx.write(3, 255);
+      dmx.update();
+    }
+    
 
 }
