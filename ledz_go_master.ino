@@ -4,19 +4,18 @@
 #include <WiFiUdp.h>
 
 //bluetooth
-/*
 #include <SoftwareSerial.h>
 #define rxPin D2 // Broche D2 en tant que RX, à raccorder sur TX du HC-05
 #define txPin D3 // Broche D3 en tant que TX, à raccorder sur RX du HC-05
 #define keyPin D4 // Broche D4 en tant que key, à raccorder sur Key du HC-05
 SoftwareSerial BTSerial(rxPin, txPin);
-*/
+
 
 
 unsigned long horloge;
 DynamicJsonDocument functionActuel(1024);
 DynamicJsonDocument functionRun(1024);
-
+DynamicJsonDocument receivedData(1024);
 DynamicJsonDocument nodes(1024);
 
 //initialization as mode terminate and waiting for the message Discovery to start, 0 for run,1 for discovery, 2 for terminate
@@ -29,6 +28,7 @@ IPAddress local_IP(192,168,4,1);
 IPAddress gateway(192,168,4,1);
 IPAddress subnet(255,255,255,0);
 IPAddress Broadcast(192,168,4,255);
+IPAddress dest;
 unsigned int localPort = 8888;
 boolean hidden = false;
 int channel = 10;
@@ -40,7 +40,7 @@ WiFiUDP Udp;
 // buffers for receiving and sending data
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE + 1]; //buffer to hold incoming packet,
 char  ReplyBuffer[] = "acked\r\n";       // a string to send back
-char testData[]="{\"Version\": 1.3,\"Timestamp\": \"2012-04-23T18:25:43.511Z\",\"SessionId\": 486316,\"Data\": {\"Type\": \"Command\",\"NodeID\": 2354,\"Channels\": [ 125, 0, 62, 214 ]}}";
+char testData[]="{\"Data\": {\"Type\": \"Command\",\"NodeID\": 2354,\"Channels\": [ 125, 0, 62, 214 ]}}";
 //maintenant tout est en Serial et on va le remplacer après
 void sendCommand(DynamicJsonDocument json){
   if(json["Data"]["NodeID"]==WiFi.macAddress().c_str()){
@@ -53,10 +53,14 @@ void sendCommand(DynamicJsonDocument json){
     Serial.println(RGB[3]);
   }else{
     //Udp.beginPacket(nodes[receivedData["Data"]["NodeID"]], localPort);
-    Udp.beginPacket(Broadcast, localPort);
-    char testData[UDP_TX_PACKET_MAX_SIZE + 1];
-    serializeJson(json,testData);
-    Udp.println(testData);
+    uint8_t ipaddress_1,ipaddress_2,ipaddress_3,ipaddress_4;
+    String ipDest=nodes["1"];
+    dest.fromString(ipDest);
+    Udp.beginPacket(dest, localPort);
+    String commandSlave;
+    serializeJson(json,commandSlave);
+    Serial.println(commandSlave);
+    Udp.println(commandSlave);
     Udp.endPacket();
   }
 }
@@ -97,7 +101,7 @@ void treatJson(DynamicJsonDocument json){
 
 void setup()
 {
-  Serial.begin(115200);  
+  Serial.begin(9600);  
   WiFi.softAPConfig(local_IP, gateway, subnet);
   Serial.println(WiFi.softAP(ssid, psk, channel, hidden, max_connection) ? "AP ready" : "AP failed");
   Udp.begin(localPort);
@@ -105,18 +109,18 @@ void setup()
   nodes[WiFi.macAddress().c_str()]=WiFi.localIP().toString().c_str();
 
   //bluetooth
-  /*
-    // define pin modes for tx, rx pins:
-    pinMode(rxPin, INPUT);
-    pinMode(txPin, OUTPUT);
+  
+  // define pin modes for tx, rx pins:
+  pinMode(rxPin, INPUT);
+  pinMode(txPin, OUTPUT);
 
-    BTSerial.begin(9600);
-    Serial.begin(9600); 
+  BTSerial.begin(9600);
+  Serial.begin(9600); 
 
-    // setup key pin
-    pinMode(keyPin, OUTPUT);
-    digitalWrite(keyPin, LOW); // key pin
-  */
+  // setup key pin
+  pinMode(keyPin, OUTPUT);
+  digitalWrite(keyPin, LOW); // key pin
+  
   horloge=millis();
 }
 
@@ -126,19 +130,12 @@ void loop() {
   }else if(masterMode==0){
 
     //bluetooth
-    /*
-     if (BTSerial.available())
-      Serial.write(BTSerial.read());
-  
-    // Keep reading from Arduino Serial Monitor 
-    //  and send to HC-05
-    if (Serial.available())
+    
+    if (BTSerial.available()){
+      deserializeJson(receivedData,BTSerial.readString());
       treatJson(receivedData);
-    */
-    DynamicJsonDocument receivedData(1024);
-    deserializeJson(receivedData,testData);
-    //treatJson(receivedData);
-    delay(1000);
+      delay(1000);
+    }
   }else{
     int packetSize = Udp.parsePacket();
     if (packetSize) {
@@ -149,12 +146,15 @@ void loop() {
       char IP[16];
       char Mac[16];
       sscanf(packetBuffer,"%s %s",IP,Mac);
+      
+      
       Serial.println(IP);
       Serial.println(Mac);
       nodes[Mac]=IP;
     }
-    if(millis()-horloge>60000){
+    if(millis()-horloge>20000){
       masterMode=0;
+      Serial.println("Run mode");
     }
   }
 }
